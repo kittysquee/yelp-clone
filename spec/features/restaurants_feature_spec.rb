@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'restaurants' do
   context 'no restaurants have been added' do
     scenario 'should display a prompt to add a restaurant' do
-      visit '/restaurants'
+      visit restaurants_path
       expect(page).to have_content 'No restaurants yet'
       expect(page).to have_link 'Add a restaurant'
     end
@@ -15,7 +15,7 @@ feature 'restaurants' do
     end
 
     scenario 'display restaurants' do
-      visit '/restaurants'
+      visit restaurants_path
       expect(page).to have_content('KFC')
       expect(page).not_to have_content('No restaurants yet')
     end
@@ -23,12 +23,23 @@ feature 'restaurants' do
 
   context 'creating restaurants' do
     scenario 'prompts user to fill out form, then displays restaurant' do
-      visit '/restaurants'
+      visit restaurants_path
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       click_button 'Create Restaurant'
       expect(page).to have_content 'KFC'
-      expect(current_path).to eq '/restaurants'
+      expect(current_path).to eq restaurants_path
+    end
+
+    context 'an invalid restaurant' do
+      scenario 'does not let user submit name that is too short' do
+        visit restaurants_path
+        click_link 'Add a restaurant'
+        fill_in 'Name', with: 'kf'
+        click_button 'Create Restaurant'
+        expect(page).not_to have_css 'h2', text: 'kf'
+        expect(page).to have_content 'error'
+      end
     end
   end
 
@@ -37,7 +48,7 @@ feature 'restaurants' do
     let!(:kfc){Restaurant.create(name:'KFC')}
 
     scenario 'lets a user view a restaurant' do
-      visit '/restaurants'
+      visit restaurants_path
       click_link 'KFC'
       expect(page).to have_content 'KFC'
       expect(current_path).to eq restaurant_path(kfc)
@@ -47,7 +58,7 @@ feature 'restaurants' do
   context 'editing restaurants' do
     before {Restaurant.create name: 'KFC', description: 'Deep fried goodness', id: 1}
     scenario 'lets user edit restaurant' do
-      visit '/restaurants'
+      visit restaurants_path
       click_link 'Edit KFC'
       fill_in 'Name', with: 'Kentucky Fried Chicken'
       fill_in 'Description', with: 'Deep fried goodness'
@@ -64,7 +75,7 @@ feature 'restaurants' do
     before {Restaurant.create name: 'KFC', description: 'Stinky chicken'}
 
     scenario 'removes restaurant when user clicks delete link' do
-      visit '/restaurants'
+      visit restaurants_path
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
