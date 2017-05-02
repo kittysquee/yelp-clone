@@ -10,6 +10,9 @@ describe Restaurant, type: :model do
   it 'is not valid unless it has a unique name' do
     Restaurant.create(name: 'Beatties')
     restaurant = Restaurant.new(name: 'Beatties')
-    expect(restaurant).to have(1).error_on(:name) 
+    expect(restaurant).to have(1).error_on(:name)
   end
+
+  it { should belong_to(:user) }
+
 end
