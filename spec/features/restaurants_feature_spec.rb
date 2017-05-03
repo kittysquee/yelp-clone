@@ -11,7 +11,7 @@ feature 'restaurants' do
 
   context 'restaurants have been added' do
     before do
-      Restaurant.create(name: 'KFC')
+      Restaurant.create(name: 'KFC', user: User.new)
     end
 
     scenario 'display restaurants' do
@@ -47,7 +47,7 @@ feature 'restaurants' do
 
   context 'viewing restaurants' do
 
-    let!(:kfc){Restaurant.create(name:'KFC')}
+    let!(:kfc){Restaurant.create(name:'KFC', user: User.new)}
 
     scenario 'lets a user view a restaurant' do
       visit restaurants_path
@@ -58,10 +58,12 @@ feature 'restaurants' do
   end
 
   context 'editing restaurants' do
-    before {Restaurant.create name: 'KFC', description: 'Deep fried goodness', id: 1}
     scenario 'lets user edit restaurant' do
       visit restaurants_path
       sign_up
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       click_link 'Edit KFC'
       fill_in 'Name', with: 'Kentucky Fried Chicken'
       fill_in 'Description', with: 'Deep fried goodness'
@@ -69,13 +71,12 @@ feature 'restaurants' do
       click_link 'Kentucky Fried Chicken'
       expect(page).to have_content 'Kentucky Fried Chicken'
       expect(page).to have_content 'Deep fried goodness'
-      expect(current_path).to eq '/restaurants/1'
     end
   end
 
   context 'deleting restaurants' do
 
-    before {Restaurant.create name: 'KFC', description: 'Stinky chicken'}
+    before {Restaurant.create name: 'KFC', description: 'Stinky chicken', user: User.new}
 
     scenario 'removes restaurant when user clicks delete link' do
       visit restaurants_path
