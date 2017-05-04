@@ -10,4 +10,13 @@ class Restaurant < ApplicationRecord
     review_params[:user] ||= user
     reviews.new(review_params)
   end
+
+  def average_rating
+    if reviews.none?
+      'N/A'
+    else
+      reviews.average(:rating)
+    end
+  end
+
 end

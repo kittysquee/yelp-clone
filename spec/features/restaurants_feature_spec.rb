@@ -24,7 +24,7 @@ feature 'restaurants' do
   context 'creating restaurants' do
     scenario 'prompts user to fill out form, then displays restaurant' do
       visit restaurants_path
-      sign_up
+      sign_up('kate@kate.com')
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       click_button 'Create Restaurant'
@@ -35,7 +35,7 @@ feature 'restaurants' do
     context 'an invalid restaurant' do
       scenario 'does not let user submit name that is too short' do
         visit restaurants_path
-        sign_up
+        sign_up('kate@kate.com')
         click_link 'Add a restaurant'
         fill_in 'Name', with: 'kf'
         click_button 'Create Restaurant'
@@ -60,7 +60,7 @@ feature 'restaurants' do
   context 'editing restaurants' do
     scenario 'lets user edit restaurant' do
       visit restaurants_path
-      sign_up
+      sign_up('kate@kate.com')
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       click_button 'Create Restaurant'
@@ -75,7 +75,7 @@ feature 'restaurants' do
 
     scenario 'only user who made restaurant can delete it' do
       visit restaurants_path
-      sign_up
+      sign_up('kate@kate.com')
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       click_button 'Create Restaurant'
@@ -93,7 +93,7 @@ feature 'restaurants' do
 
     scenario 'removes restaurant when user clicks delete link' do
       visit restaurants_path
-      sign_up
+      sign_up('kate@kate.com')
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       click_button 'Create Restaurant'
@@ -104,7 +104,7 @@ feature 'restaurants' do
 
     scenario 'only user who made restaurant can delete it' do
       visit restaurants_path
-      sign_up
+      sign_up('kate@kate.com')
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       click_button 'Create Restaurant'
