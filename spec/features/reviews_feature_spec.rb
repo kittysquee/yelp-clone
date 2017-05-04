@@ -24,4 +24,14 @@ feature 'reviewing' do
     visit restaurants_path
     expect(page).not_to have_link('Review KFC')
   end
+
+  scenario 'user cannot review their own restaurant' do
+    visit restaurants_path
+    sign_up
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Kates'
+    click_button 'Create Restaurant'
+    expect(current_path).to eq restaurants_path
+    expect(page).not_to have_content('Review Kates')
+  end
 end
