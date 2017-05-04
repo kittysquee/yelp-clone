@@ -72,18 +72,49 @@ feature 'restaurants' do
       expect(page).to have_content 'Kentucky Fried Chicken'
       expect(page).to have_content 'Deep fried goodness'
     end
+
+    scenario 'only user who made restaurant can delete it' do
+      visit restaurants_path
+      sign_up
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+      click_link 'Sign out'
+      click_link 'Sign up'
+      fill_in 'Email', with: 'cat@cat.com'
+      fill_in 'Password', with: 'catcat'
+      fill_in 'Password confirmation', with: 'catcat'
+      click_button 'Sign up'
+      expect(page).to_not have_content 'Edit KFC'
+    end
   end
 
   context 'deleting restaurants' do
 
-    before {Restaurant.create name: 'KFC', description: 'Stinky chicken', user: User.new}
-
     scenario 'removes restaurant when user clicks delete link' do
       visit restaurants_path
       sign_up
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    scenario 'only user who made restaurant can delete it' do
+      visit restaurants_path
+      sign_up
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+      click_link 'Sign out'
+      click_link 'Sign up'
+      fill_in 'Email', with: 'cat@cat.com'
+      fill_in 'Password', with: 'catcat'
+      fill_in 'Password confirmation', with: 'catcat'
+      click_button 'Sign up'
+      expect(page).to_not have_content 'Delete KFC'
     end
   end
 end

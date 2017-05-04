@@ -29,13 +29,13 @@ class RestaurantsController < ApplicationController
   end
 
   def update
-    @restaurant = Restaurant.find(params[:id])
+    @restaurant = current_user.restaurants.find(params[:id])
     @restaurant.update(restaurant_params)
     redirect_to restaurants_path
   end
 
   def destroy
-    @restaurant = Restaurant.find(params[:id])
+    @restaurant = current_user.restaurants.find(params[:id])
     @restaurant.destroy
     flash[:notice] = 'Restaurant deleted successfully'
     redirect_to restaurants_path
